@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin-panel</title>
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Bootstrap RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css"
+        integrity="sha384-CfCrinSRH2IR6a4e6fy2q6ioOX7O6Mtm1L9vRvFZ1trBncWmMePhzvafv7oIcWiW" crossorigin="anonymous">
+    <!-- AlpineJS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section x-data="toggleSidebar">
+        <!-- Sidebar -->
+        <section x-cloak class="sidebar" :class="open || 'inactive'">
+            <div class="d-flex justify-content-between align-items-center justify-content-lg-center">
+                <h4 class="fw-bold mt-1">Thea-web</h4>
+                <i @click="toggle" class="d-lg-none fs-1 bi bi-x"></i>
+            </div>
+            <div class="mt-4">
+                <ul class="list-unstyled">
+                    <li class="bar-item active">
+                        <a href="#" class="bar-link">
+                            <i class="me-2 bi bi-grid-fill"></i>
+                            <span>داشبورد</span>
+                        </a>
+                    </li>
+
+                    <!-- فروشگاه -->
+                    <li x-data="dropdown" x-transition class="bar-item">
+                        <div @click="toggle" class="bar-link">
+                            <i class="me-2 bi bi-shop"></i>
+                            <span>فروشگاه</span>
+                            <i class="bi bi-chevron-down ms-auto h6 mt-1 cruser"></i>
+                        </div>
+                        <ul x-show="open" class="list-unstyled sum">
+                            <li class="menu"><a href="#">خدمات بهداشتی</a></li>
+                            <li class="menu"><a href="#">خدمات سلامتی</a></li>
+                            <li class="menu"><a href="#">خدمات زیبایی</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- محصولات -->
+                    <li x-data="dropdown" x-transition class="bar-item">
+                        <div @click="toggle" class="bar-link">
+                            <i class="me-2 bi bi-box-seam"></i>
+                            <span>محصولات</span>
+                            <i class="bi bi-chevron-down ms-auto h6 mt-1 cruser"></i>
+                        </div>
+                        <ul x-show="open" class="list-unstyled sum">
+                            <li class="menu"><a href="#">ممبر ایتا</a></li>
+                            <li class="menu"><a href="#">ممبر بله</a></li>
+                            <li class="menu"><a href="#">ممبر روبیکا</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- سفارشات -->
+                    <li x-data="dropdown" x-transition class="bar-item">
+                        <div @click="toggle" class="bar-link">
+                            <i class="me-2 bi bi-basket-fill"></i>
+                            <span>سفارشات</span>
+                            <i class="bi bi-chevron-down ms-auto h6 mt-1 cruser"></i>
+                        </div>
+                        <ul x-show="open" class="list-unstyled sum">
+                            <li class="menu"><a href="#">خدمات بازدید</a></li>
+                            <li class="menu"><a href="#">خدمات عضو</a></li>
+                            <li class="menu"><a href="#">خدمات لایک</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="bar-item active">
+                        <a href="#" class="bar-link">
+                            <i class="me-2 bi bi-percent"></i>
+                            <span>تخفیف ها</span>
+                        </a>
+                    </li>
+
+                    <li class="bar-item active">
+                        <a href="#" class="bar-link">
+                            <i class="me-2 bi bi-chat-right-dots-fill"></i>
+                            <span>تیکت</span>
+                        </a>
+                    </li>
+
+                    <!-- کاربران -->
+                    <li x-data="dropdown" x-transition class="bar-item">
+                        <div @click="toggle" class="bar-link">
+                            <i class="me-2 bi bi-people-fill"></i>
+                            <span>کاربران</span>
+                            <i class="bi bi-chevron-down ms-auto h6 mt-1 cruser"></i>
+                        </div>
+                        <ul x-show="open" class="list-unstyled sum">
+                            <li class="menu"><a href="#">لیست کاربران</a></li>
+                            <li class="menu"><a href="#">ویرایش کاربران</a></li>
+                            <li class="menu"><a href="#">ایجاد کاربران</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- کامنت‌ها -->
+                    <li x-data="dropdown" x-transition class="bar-item">
+                        <div @click="toggle" class="bar-link">
+                            <i class="me-2 bi bi-chat-dots-fill"></i>
+                            <span>کامنت ها</span>
+                            <i class="bi bi-chevron-down ms-auto h6 mt-1 cruser"></i>
+                        </div>
+                        <ul x-show="open" class="list-unstyled sum">
+                            <li class="menu"><a href="#">کسانی که رضایت داشتند</a></li>
+                            <li class="menu"><a href="#">کسانی که نظر خاصی ندادند داشتند</a></li>
+                            <li class="menu"><a href="#">کسانی که رضایت نداشتند</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+        <section class="main" :class="open || 'active'">
+            <header class="d-flex align-items-center justify-content-between p-3 p-sm-3 me-3">
+                <div><i @click="toggle" class="bi bi-justify fs-3 ms-2 opmen"></i></div>
+                <div class="d-flex align-items-center">
+
+                    <div class="dropdown ">
+                        <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="position-absolute top-0 end-50 translate-middle badge rounded-pill bg-danger">
+                                9
+
+                            </span>
+                            <i class="bi bi-envelope h4"></i>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم </a></li>
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم متن </a></li>
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم متن ساختگی</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="dropdown mx-4">
+                        <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <i class="bi bi-bell h4"></i>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم </a></li>
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم متن </a></li>
+                            <li><a class="dropdown-item h7" href="#">لورم ایپسوم متن ساختگی</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="dropdown">
+                        <div class="dropdown-toggle profile d-flex align-items-center" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="img/2.jpg" alt="" class="img-fluid rounded-circle" width="50">
+                            <div class="mt-3 ms-1">
+                                <h6 class="fw-bold mb-0">
+                                    آتنا طاهری
+                                </h6>
+                                <p>طراح سایت</p>
+
+                            </div>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="">
+                                <a href="#" class="dropdown-item h6">
+                                    <i class="bi bi-person "></i>
+                                    پروفایل
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="#" class="dropdown-item h6">
+                                    <i class="bi bi-gear "></i>
+                                    تنظیمات
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="#" class="dropdown-item h6">
+                                    <i class="bi bi-wallet "></i>
+                                    حساب کاربری
+                                </a>
+                            </li>
+                            <hr>
+                            <li class="">
+                                <a href="#" class="dropdown-item h6">
+                                    <i class="bi bi-box-arrow-left"></i>
+                                    خروج
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content p-4 p-sm-2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <nav aria-label="breadcrumb" class="ms-4">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html" class="a1">داشبورد</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">تخفیف ها</li>
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header text-end">
+                                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <i class="bi bi-funnel-fill"></i>
+                                    فیلتر
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>نام محصول</th>
+                                                <th>موجودی</th>
+                                                <th>قیمت</th>
+                                                <th>وضعیت</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>کتاب</td>
+                                                <td>4</td>
+                                                <td>120000</td>
+                                                <td>تایید شده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>گوشی</td>
+                                                <td>0</td>
+                                                <td>14500000</td>
+                                                <td>تایید نشده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>شلوارک</td>
+                                                <td>10</td>
+                                                <td>200000</td>
+                                                <td>تایید شده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>ماژیک</td>
+                                                <td>7</td>
+                                                <td>15000</td>
+                                                <td>تایید شده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>کتاب ادبی</td>
+                                                <td>5</td>
+                                                <td>250000</td>
+                                                <td>تایید شده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td>ایر پاد</td>
+                                                <td>21</td>
+                                                <td>2390000</td>
+                                                <td>تایید نشده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>7</td>
+                                                <td>پایه گوشی</td>
+                                                <td>17</td>
+                                                <td>45000</td>
+                                                <td>تایید شده</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-dark dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            عملیات
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#">نمایش</a></li>
+                                                            <li><a class="dropdown-item" href="#">ویرایش</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item" href="#"> حذف
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-center mt-5">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">فیلتر محصول</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <lable class="form-label">نام محصول</lable>
+                            <input type="text" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <lable class="form-label">وضعیت محصول</lable>
+                            <select name="" class="form-select" id="">
+                                <option value="1">تایید شده</option>
+                                <option value="2">تایید نشده</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">کنسل</button>
+                        <button type="submit" class="btn btn-dark">فیلتر</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Scripts -->
+
+    <!-- در قسمت <head> یا قبل از اسکریپت خودتان -->
+    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('toggleSidebar', () => ({
+                open: window.innerWidth <= 992 ? false : true,
+                toggle() {
+                    this.open = !this.open
+                }
+            }));
+            Alpine.data('dropdown', () => ({
+                open: false,
+                toggle() {
+                    this.open = !this.open
+                }
+            }));
+        });
+
+        // فعال کردن PureCounter
+        document.addEventListener('DOMContentLoaded', () => {
+            new PureCounter();
+        });
+
+
+        // chart
+        am5.ready(function () {
+
+
+            // Create root element
+            // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+            var root = am5.Root.new("chartdiv");
+
+
+            // Set themes
+            // https://www.amcharts.com/docs/v5/concepts/themes/
+            root.setThemes([
+                am5themes_Animated.new(root)
+            ]);
+
+
+            // Create chart
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/
+            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                panX: true,
+                panY: true,
+                wheelX: "none",
+                wheelY: "none",
+                paddingLeft: 0
+            }));
+
+            // We don't want zoom-out button to appear while animating, so we hide it
+            chart.zoomOutButton.set("forceHidden", true);
+
+
+            // Create axes
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+            var xRenderer = am5xy.AxisRendererX.new(root, {
+                minGridDistance: 30,
+                minorGridEnabled: true
+            });
+            xRenderer.labels.template.setAll({
+                rotation: -90,
+                centerY: am5.p50,
+                centerX: 0,
+                paddingRight: 15
+            });
+            xRenderer.grid.template.set("visible", false);
+
+            var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                maxDeviation: 0.3,
+                categoryField: "country",
+                renderer: xRenderer
+            }));
+
+            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                maxDeviation: 0.3,
+                min: 0,
+                renderer: am5xy.AxisRendererY.new(root, {})
+            }));
+
+
+            // Add series
+            // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                name: "Series 1",
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: "value",
+                categoryXField: "country"
+            }));
+
+            // Rounded corners for columns
+            series.columns.template.setAll({
+                cornerRadiusTL: 5,
+                cornerRadiusTR: 5,
+                strokeOpacity: 0
+            });
+
+            // Make each column to be of a different color
+            series.columns.template.adapters.add("fill", function (fill, target) {
+                return chart.get("colors").getIndex(series.columns.indexOf(target));
+            });
+
+            series.columns.template.adapters.add("stroke", function (stroke, target) {
+                return chart.get("colors").getIndex(series.columns.indexOf(target));
+            });
+
+            // Add Label bullet
+            series.bullets.push(function () {
+                return am5.Bullet.new(root, {
+                    locationY: 1,
+                    sprite: am5.Label.new(root, {
+                        text: "{valueYWorking.formatNumber('#.')}",
+                        fill: root.interfaceColors.get("alternativeText"),
+                        centerY: 0,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                });
+            });
+
+
+            // Set data
+            var data = [{
+                "country": "فروردین",
+                "value": 2250
+            }, {
+                "country": "اردیبهشت",
+                "value": 1110
+            }, {
+                "country": "خرداد",
+                "value": 999
+            }, {
+                "country": "تیر",
+                "value": 888
+            }, {
+                "country": "مرداد",
+                "value": 777
+            }, {
+                "country": "شهریور",
+                "value": 666
+            }, //{
+                //     "country": "India",
+                //     "value": 984
+                // }, {
+                //     "country": "Spain",
+                //     "value": 711
+                // }, {
+                //     "country": "Netherlands",
+                //     "value": 665
+                // }, {
+                //     "country": "South Korea",
+                //     "value": 443
+                // }, {
+                //     "country": "Canada",
+                //     "value": 441
+                // }
+            ];
+
+            xAxis.data.setAll(data);
+            series.data.setAll(data);
+
+            // update data with random values each 1.5 sec
+            setInterval(function () {
+                updateData();
+            }, 1500)
+
+            function updateData() {
+                am5.array.each(series.dataItems, function (dataItem) {
+                    var value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
+                    if (value < 0) {
+                        value = 10;
+                    }
+                    // both valueY and workingValueY should be changed, we only animate workingValueY
+                    dataItem.set("valueY", value);
+                    dataItem.animate({
+                        key: "valueYWorking",
+                        to: value,
+                        duration: 600,
+                        easing: am5.ease.out(am5.ease.cubic)
+                    });
+                })
+
+                sortCategoryAxis();
+            }
+
+
+            // Get series item by category
+            function getSeriesItem(category) {
+                for (var i = 0; i < series.dataItems.length; i++) {
+                    var dataItem = series.dataItems[i];
+                    if (dataItem.get("categoryX") == category) {
+                        return dataItem;
+                    }
+                }
+            }
+
+
+            // Axis sorting
+            function sortCategoryAxis() {
+
+                // Sort by value
+                series.dataItems.sort(function (x, y) {
+                    return y.get("valueY") - x.get("valueY"); // descending
+                    //return y.get("valueY") - x.get("valueY"); // ascending
+                })
+
+                // Go through each axis item
+                am5.array.each(xAxis.dataItems, function (dataItem) {
+                    // get corresponding series item
+                    var seriesDataItem = getSeriesItem(dataItem.get("category"));
+
+                    if (seriesDataItem) {
+                        // get index of series data item
+                        var index = series.dataItems.indexOf(seriesDataItem);
+                        // calculate delta position
+                        var deltaPosition = (index - dataItem.get("index", 0)) / series.dataItems.length;
+                        // set index to be the same as series data item index
+                        dataItem.set("index", index);
+                        // set deltaPosition instanlty
+                        dataItem.set("deltaPosition", -deltaPosition);
+                        // animate delta position to 0
+                        dataItem.animate({
+                            key: "deltaPosition",
+                            to: 0,
+                            duration: 1000,
+                            easing: am5.ease.out(am5.ease.cubic)
+                        })
+                    }
+                });
+
+                // Sort axis items by index.
+                // This changes the order instantly, but as deltaPosition is set,
+                // they keep in the same places and then animate to true positions.
+                xAxis.dataItems.sort(function (x, y) {
+                    return x.get("index") - y.get("index");
+                });
+            }
+
+
+            // Make stuff animate on load
+            // https://www.amcharts.com/docs/v5/concepts/animations/
+            series.appear(1000);
+            chart.appear(1000, 100);
+
+        }); // end am5.ready()
+
+
+        // chart2
+
+        am5.ready(function () {
+            var root2 = am5.Root.new("chartdiv2");
+
+            root2.setThemes([am5themes_Animated.new(root2)]);
+
+            // PieChart
+            var chart2 = root2.container.children.push(am5percent.PieChart.new(root2, {
+                layout: root2.verticalLayout
+            }));
+
+            // PieSeries
+            var series2 = chart2.series.push(am5percent.PieSeries.new(root2, {
+                valueField: "value",
+                categoryField: "category",
+                radius: am5.percent(60),      // کمتر شد
+                innerRadius: am5.percent(40), // حلقه داخلی
+                centerX: am5.percent(5),     // وسط افقی
+                centerY: am5.percent(20),     // وسط عمودی
+                alignLabels: true
+            }));
+
+            // برچسب‌ها روی نمودار
+            series2.labels.template.setAll({
+                textType: "regular",
+                fontSize: 14,
+                centerX: am5.percent(50),
+                centerY: am5.percent(50),
+                textAlign: "center",
+                radius: am5.percent(50), // فاصله از مرکز
+                inside: true
+            });
+
+            // داده‌ها
+            series2.data.setAll([
+                { value: 70, category: "پرداخت‌های موفق" },
+                { value: 30, category: "پرداخت‌های ناموفق" }
+            ]);
+
+            // // Legend پایین نمودار
+            // var legend2 = chart2.children.push(am5.Legend.new(root2, {
+            //     layout: root2.horizontalLayout,
+            //     centerX: am5.percent(50),
+            //     x: am5.percent(10),
+            //     marginTop: 2
+
+            // }));
+            legend2.data.setAll(series2.dataItems);
+
+            // انیمیشن
+            series2.appear(1000, 100);
+        });
+
+
+    </script>
+
+
+
+</body>
+
+</html>
